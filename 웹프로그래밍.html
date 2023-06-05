@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>자취생을 위한 간단한 레시피</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    h2 {
+      color: #666;
+      cursor: pointer;
+    }
+
+    p {
+      color: #999;
+      line-height: 1.4;
+    }
+
+    .recipe {
+      display: none;
+    }
+
+    #calculator {
+      margin-bottom: 20px;
+    }
+
+    #result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: red;
+    }
+    
+    .calculator-inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .calculator-inputs label {
+      width: 150px;
+      text-align: left;
+    }
+    .calculator-inputs input[type="text"],
+    .calculator-inputs select {
+      width: 150px;
+    }
+    
+    #comment-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        #comment-box input[type="text"] {
+            width: 200px;
+        }
+
+        #comment-box textarea {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
+        }
+
+        #comment-box .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        #comment-box button {
+            flex-shrink: 0;
+        }
+  </style>
+</head>
+<body>
+  <h1>자취생을 위한 간단한 레시피 '자취요리'</h1>
+  <p>
+  혼자사는 자취생은 편리하고 빠른 식사를 위해 인스턴트 식품을 먹기도 합니다. 하지만 인스턴트 식품은 대체로 영양소가 불균형하고 고열량이며, 식품 첨가물이 포함되어 있어 건강에 좋은 선택은 아닙니다. 건강을 생각한다면 직접 조리한 식사를 먹는것이 어떨까요? 자취요리는 인스턴트 식품보다 건강하고 맛있는 식사를 만들고자 하는 자취생을 위한 레시피 정보를 제공하는 웹사이트입니다.
+  </p>
+  <h2>하루 권장 섭취 칼로리 계산기</h2>
+  <div class="calculator-inputs">
+  <label for="gender">성별</label>
+  <select id="gender">
+    <option value="male">남성</option>
+    <option value="female">여성</option>
+  </select><br>
+  <label for="age">나이</label>
+  <input type="number" id="age"><br>
+  <label for="weight">체중(kg)</label>
+  <input type="number" id="weight"><br>
+  <label for="activityLevel">활동 수준</label>
+  <select id="activityLevel">
+    <option value="0">비활동적</option>
+    <option value="1">가벼운 활동</option>
+    <option value="2">보통 활동</option>
+    <option value="3">활발한 활동</option>
+    <option value="4">매우 활발한 활동</option>
+  </select><br>
+  <button onclick="calculateCalories()">계산</button>
+  <div id="result"></div>
+
+  <h2 onclick="toggleRecipe('recipe1')">김치볶음밥</h2>
+  <div id="recipe1" class="recipe">
+    <p>김치볶음밥은 만들기 쉬운 대표적인 자취생 식사 메뉴입니다. 밥과 김치, 다양한 재료와 함께 볶아내면 매콤하고 맛있는 요리가 완성됩니다.</p>
+    <p>레시피:</p>
+    <p>1. 팬에 식용유를 두르고 중간 불에서 볶은 후 김치를 넣고 볶아줍니다.</p>
+    <p>2. 밥과 김치를 섞어 볶은 후 소금, 깨소금, 참기름을 넣고 볶아줍니다.</p>
+    <p>3. 기호에 맞게 야채나 스팸등을 추가하고 볶으면 완성입니다.</p>
+    <p>1인분(250g)기준 530kcal</p>
+  </div>
+
+  <h2 onclick="toggleRecipe('recipe2')">계란볶음밥</h2>
+  <div id="recipe2" class="recipe">
+    <p>계란볶음밥은 간단하고 맛있는 자취생 식사 메뉴입니다. 밥과 계란, 야채를 함께 볶아내면 담백하면서도 고소한 맛을 느낄 수 있습니다.</p>
+    <p>레시피:</p>
+    <p>1. 팬에 식용유를 두르고 중간 불에서 밥을 볶은 후 계란을 풀어 넣고 볶아줍니다.</p>
+    <p>2. 야채를 추가하고 볶아줍니다. 소금이나 간장으로 간을 맞추면 완성입니다.</p>
+    <p>1인분(260g)기준 584kcal</p>
+  </div>
+
+  <h2 onclick="toggleRecipe('recipe3')">계란찜</h2>
+  <div id="recipe3" class="recipe">
+    <p>계란찜은 만들기 쉬우면서도 맛있는 고단백 식품입니다.</p>
+    <p>레시피:</p>
+    <p>1. 계란을 용기에 까서 풀어줍니다. 계란물을 체에 걸러서 곱게해주면 좋습니다.</p>
+    <p>2. 우유를 섞어 고소하게 해줍니다.</p>
+    <p>3. 비닐 랩으로 덮고 구멍을 뚫어 전자레인지에서 조리합니다.</p>
+    <p>1인분(80g)기준 168kcal</p>
+  </div>
+
+  <h3>댓글 작성하기 - 댓글로 나만의 레시피를 공유하세요</h3>
+
+  <div id="comment-box">
+    <div class="input-row">
+        <input type="text" id="name" placeholder="이름">
+        <button onclick="addComment()">댓글 작성</button>
+    </div>
+    <textarea id="comment" placeholder="댓글 내용"></textarea>
+</div>
+
+<div id="comment-list">
+    <!-- 여기에 동적으로 추가되는 댓글이 표시됩니다 -->
+</div>
+    
+<br><br><br><br><br><br><br><br><br><br><br>
+
+  <script>
+    //칼로리 계산 함수
+    function calculateCalories() {
+      // 사용자로부터 입력받은 값 가져오기
+      const gender = document.getElementById('gender').value;
+      const age = document.getElementById('age').value;
+      const weight = document.getElementById('weight').value;
+      const activityLevel = document.getElementById('activityLevel').value;
+
+      // 입력값 유효성 검사
+      if (age < 0 || weight < 0) {
+        document.getElementById('result').innerHTML = '잘못된 수치입니다.';
+        return;
+      }
+
+      // 활동 계수 설정
+      const activityCoefficients = [1.2, 1.375, 1.55, 1.725, 1.85];
+      let activityCoefficient = activityCoefficients[activityLevel];
+
+      // 칼로리 계산
+      let calories = 0;
+      if (gender === 'male') {
+        calories = weight * 24 * activityCoefficient;
+      } else if (gender === 'female') {
+        calories = weight * 21.6 * activityCoefficient;
+      }
+
+      // 결과 출력
+      document.getElementById('result').innerHTML = '하루 권장 섭취 칼로리: ' + calories.toFixed(2) + 'kcal';
+    }
+
+     // 레시피 정보를 보여주고 숨기는 함수
+    function toggleRecipe(recipeId) {
+      let recipe = document.getElementById(recipeId);
+      if (recipe.style.display === 'none') {
+        recipe.style.display = 'block';
+      } else {
+        recipe.style.display = 'none';
+      }
+    }
+
+     // 댓글 작성 함수
+    function addComment() {
+            let name = document.getElementById("name").value;
+            let comment = document.getElementById("comment").value;
+
+            if (name && comment) {
+                let commentElement = document.createElement("div");
+                commentElement.innerHTML = "<strong>" + name + ":</strong> " + comment;
+
+                document.getElementById("comment-list").appendChild(commentElement);
+
+                // 입력 필드 초기화
+                document.getElementById("name").value = "";
+                document.getElementById("comment").value = "";
+            }
+        }
+  </script>
+</body>
+</html>
+

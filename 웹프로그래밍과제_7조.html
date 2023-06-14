@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>자취생을 위한 간단한 레시피</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    h2 {
+      color: #666;
+      cursor: pointer;
+    }
+
+    p {
+      color: #999;
+      line-height: 1.4;
+    }
+
+    .recipe {
+      display: none;
+    }
+
+    #calculator {
+      margin-bottom: 20px;
+    }
+
+    #result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .calculator-inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .calculator-inputs label {
+      width: 150px;
+      text-align: left;
+    }
+
+    .calculator-inputs input[type="text"],
+    .calculator-inputs select {
+      width: 150px;
+    }
+
+    #comment-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    #comment-box input[type="text"] {
+      width: 200px;
+    }
+
+    #comment-box textarea {
+      width: 100%;
+      height: 100px;
+      resize: vertical;
+    }
+
+    #comment-box .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    #comment-box button {
+      flex-shrink: 0;
+    }
+
+    .recipe {
+      display: none;
+    }
+
+    .food-display {
+      width: 150px;
+      height: 50px;
+      border: 3px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>자취생을 위한 간단한 레시피 '자취요리'</h1>
+  <p>
+    혼자사는 자취생은 편리하고 빠른 식사를 위해 인스턴트 식품을 먹기도 합니다. 하지만 인스턴트 식품은 대체로 영양소가 불균형하고 고열량이며, 식품 첨가물이 포함되어 있어 건강에 좋은 선택은 아닙니다. 건강을
+    생각한다면 직접 조리한 식사를 먹는것이 어떨까요? 자취요리는 인스턴트 식품보다 건강하고 맛있는 식사를 만들고자 하는 자취생을 위한 레시피 정보를 제공하는 웹사이트입니다.
+  </p>
+  <div class="food-display" id="food-display"></div>
+  <button id="randomFood">음식 추천 받기</button>
+  <h2>하루 권장 섭취 칼로리 계산기</h2>
+  <div class="calculator-inputs">
+    <label for="gender">성별</label>
+    <select id="gender">
+      <option value="male">남성</option>
+      <option value="female">여성</option>
+    </select><br>
+    <label for="age">나이</label>
+    <input type="number" id="age"><br>
+    <label for="weight">체중(kg)</label>
+    <input type="number" id="weight"><br>
+    <label for="activityLevel">활동 수준</label>
+    <select id="activityLevel">
+      <option value="0">비활동적</option>
+      <option value="1">가벼운 활동</option>
+      <option value="2">보통 활동</option>
+      <option value="3">활발한 활동</option>
+      <option value="4">매우 활발한 활동</option>
+    </select><br>
+    <button onclick="calculateCalories()">계산</button>
+    <div id="result"></div>
+
+    <br>
+    <input type="text" id="searchInput" onkeyup="searchRecipe()" placeholder="레시피 검색">
+    <br>
+
+    <h2 onclick="toggleRecipe('recipe1')">김치볶음밥</h2>
+    <div id="recipe1" class="recipe">
+      <p>김치볶음밥은 만들기 쉬운 대표적인 자취생 식사 메뉴입니다. 밥과 김치, 다양한 재료와 함께 볶아내면 매콤하고 맛있는 요리가 완성됩니다.</p>
+      <p>레시피:</p>
+      <p>1. 팬에 식용유를 두르고 중간 불에서 볶은 후 김치를 넣고 볶아줍니다.</p>
+      <p>2. 밥과 김치를 섞어 볶은 후 소금, 깨소금, 참기름을 넣고 볶아줍니다.</p>
+      <p>3. 기호에 맞게 야채나 스팸등을 추가하고 볶으면 완성입니다.</p>
+      <p>1인분(250g)기준 530kcal</p>
+      <button id="likeBtn1">좋아요!</button>
+      <span id="likeCount1">0</span>
+      <button id="dislikeBtn1">싫어요</button>
+      <span id="dislikeCount1">0</span>
+    </div>
+
+    <h2 onclick="toggleRecipe('recipe2')">계란볶음밥</h2>
+    <div id="recipe2" class="recipe">
+      <p>계란볶음밥은 간단하고 맛있는 자취생 식사 메뉴입니다. 밥과 계란, 야채를 함께 볶아내면 담백하면서도 고소한 맛을 느낄 수 있습니다.</p>
+      <p>레시피:</p>
+      <p>1. 팬에 식용유를 두르고 중간 불에서 밥을 볶은 후 계란을 풀어 넣고 볶아줍니다.</p>
+      <p>2. 야채를 추가하고 볶아줍니다. 소금이나 간장으로 간을 맞추면 완성입니다.</p>
+      <p>1인분(260g)기준 584kcal</p>
+      <button id="likeBtn2">좋아요!</button>
+      <span id="likeCount2">0</span>
+      <button id="dislikeBtn2">싫어요</button>
+      <span id="dislikeCount2">0</span>
+    </div>
+
+    <h2 onclick="toggleRecipe('recipe3')">계란찜</h2>
+    <div id="recipe3" class="recipe">
+      <p>계란찜은 만들기 쉬우면서도 맛있는 고단백 식품입니다.</p>
+      <p>레시피:</p>
+      <p>1. 계란을 용기에 까서 풀어줍니다. 계란물을 체에 걸러서 곱게해주면 좋습니다.</p>
+      <p>2. 우유를 섞어 고소하게 해줍니다.</p>
+      <p>3. 비닐 랩으로 덮고 구멍을 뚫어 전자레인지에서 조리합니다.</p>
+      <p>1인분(80g)기준 168kcal</p>
+      <button id="likeBtn3">좋아요!</button>
+      <span id="likeCount3">0</span>
+      <button id="dislikeBtn3">싫어요</button>
+      <span id="dislikeCount3">0</span>
+    </div>
+
+    <h3>댓글 작성하기 - 댓글로 나만의 레시피를 공유하세요</h3>
+
+    <div id="comment-box">
+      <div class="input-row">
+        <input type="text" id="name" placeholder="이름">
+        <button onclick="addComment()">댓글 작성</button>
+      </div>
+      <textarea id="comment" placeholder="댓글 내용"></textarea>
+    </div>
+
+    <div id="comment-list">
+    </div>
+
+
+    <script>
+
+      function calculateCalories() {
+        const gender = document.getElementById('gender').value;
+        const age = document.getElementById('age').value;
+        const weight = document.getElementById('weight').value;
+        const activityLevel = document.getElementById('activityLevel').value;
+
+        if (age < 0 || weight < 0) {
+          document.getElementById('result').innerHTML = '잘못된 수치입니다.';
+          return;
+        }
+
+        const activityCoefficients = [1.2, 1.375, 1.55, 1.725, 1.85];
+        let activityCoefficient = activityCoefficients[activityLevel];
+
+        let calories = 0;
+        if (gender === 'male') {
+          calories = weight * 24 * activityCoefficient;
+        } else if (gender === 'female') {
+          calories = weight * 21.6 * activityCoefficient;
+        }
+
+        document.getElementById('result').innerHTML = '하루 권장 섭취 칼로리: ' + calories.toFixed(2) + 'kcal';
+      }
+
+      function addComment() {
+        let name = document.getElementById("name").value;
+        let comment = document.getElementById("comment").value;
+
+        if (name && comment) {
+          let commentElement = document.createElement("div");
+          commentElement.innerHTML = "<strong>" + name + ":</strong> " + comment;
+
+          document.getElementById("comment-list").appendChild(commentElement);
+
+          document.getElementById("name").value = "";
+          document.getElementById("comment").value = "";
+        }
+      }
+
+      function toggleRecipe(recipeId) {
+        const recipe = document.getElementById(recipeId);
+        recipe.style.display = recipe.style.display === 'none' ? 'block' : 'none';
+      }
+
+      function searchRecipe() {
+        const searchInput = document.getElementById('searchInput');
+        const filter = searchInput.value.toUpperCase();
+        const recipes = document.getElementsByClassName('recipe');
+
+        for (let i = 0; i < recipes.length; i++) {
+          const recipe = recipes[i];
+          const recipeName = recipe.previousElementSibling.textContent.toUpperCase();
+          const paragraphs = recipe.getElementsByTagName('p');
+          const h2 = recipe.previousElementSibling;
+
+
+          if (recipeName.includes(filter)) {
+            recipe.style.display = 'block';
+
+            h2.style.display = 'block';
+            for (let j = 0; j < paragraphs.length; j++) {
+              paragraphs[j].style.display = 'block'
+            }
+          } else {
+            recipe.style.display = 'none';
+
+            h2.style.display = 'none';
+            for (let j = 0; j < paragraphs.length; j++) {
+              paragraphs[j].style.display = 'none';
+            }
+          }
+        }
+      }
+
+      const foods = ['김치볶음밥', '계란볶음밥', '계란찜']; 
+
+      function getRandomFood() { 
+        const randomIndex = Math.floor(Math.random() * foods.length);
+        return foods[randomIndex];
+      }
+
+      let foodInterval; 
+
+      function cycleFoods(display) { 
+        let currentIndex = 0;
+        foodInterval = setInterval(() => { 
+          display.textContent = foods[currentIndex]; 
+          currentIndex = (currentIndex + 1) % foods.length; 
+        }, 100); 
+      }
+
+      function stopFoodCycle(display) { 
+        setTimeout(() => {
+          clearInterval(foodInterval); 
+          display.textContent = getRandomFood(); 
+          foodInterval = undefined; 
+        }, 2000); 
+      }
+
+      document.getElementById('randomFood').addEventListener('click', () => { 
+        const display = document.getElementById('food-display');
+
+        if (!foodInterval) { 
+          cycleFoods(display); 
+          stopFoodCycle(display); 
+        }
+      });
+
+      var likeBtn1 = document.getElementById("likeBtn1");
+      var likeCount1 = document.getElementById("likeCount1");
+      var likeValue1 = 0;
+
+      likeBtn1.addEventListener("click", function () {
+        likeValue1++;
+        likeCount1.textContent = likeValue1;
+      });
+
+      var dislikeBtn1 = document.getElementById("dislikeBtn1");
+      var dislikeCount1 = document.getElementById("dislikeCount1");
+      var dislikeValue1 = 0;
+
+      dislikeBtn1.addEventListener("click", function () {
+        dislikeValue1++;
+        dislikeCount1.textContent = dislikeValue1;
+      });
+      var likeBtn2 = document.getElementById("likeBtn2");
+      var likeCount2 = document.getElementById("likeCount2");
+      var likeValue2 = 0;
+
+      likeBtn2.addEventListener("click", function () {
+        likeValue2++;
+        likeCount2.textContent = likeValue2;
+      });
+
+      var dislikeBtn2 = document.getElementById("dislikeBtn2");
+      var dislikeCount2 = document.getElementById("dislikeCount2");
+      var dislikeValue2 = 0;
+
+      dislikeBtn2.addEventListener("click", function () {
+        dislikeValue2++;
+        dislikeCount2.textContent = dislikeValue2;
+      });     
+       var likeBtn3 = document.getElementById("likeBtn3");
+      var likeCount3 = document.getElementById("likeCount3");
+      var likeValue3= 0;
+
+      likeBtn3.addEventListener("click", function () {
+        likeValue3++;
+        likeCount3.textContent = likeValue3;
+      });
+
+      var dislikeBtn3 = document.getElementById("dislikeBtn3");
+      var dislikeCount3 = document.getElementById("dislikeCount3");
+      var dislikeValue3 = 0;
+
+      dislikeBtn3.addEventListener("click", function () {
+        dislikeValue3++;
+        dislikeCount3.textContent = dislikeValue3;
+      });
+    </script>
+
+
+</body>
+
+</html>
